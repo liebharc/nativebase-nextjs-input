@@ -1,25 +1,9 @@
 import React, { useState } from 'react';
-import {
-	Center,
-	useColorMode,
-	Tooltip,
-	IconButton,
-	SunIcon,
-	MoonIcon,
-	Image,
-	HStack,
-	Text,
-	Heading,
-	Box,
-	Link,
-	VStack,
-	Button,
-	AspectRatio,
-	Input,
-} from 'native-base';
+import { Center, Heading, VStack, Button, Input, Modal } from 'native-base';
 
 // Start editing here, save and see your changes.
 export default function App() {
+	const [showModal, setShowModal] = useState(false);
 	const [value, setValue] = useState('');
 	return (
 		<Center
@@ -28,86 +12,48 @@ export default function App() {
 			_light={{ bg: 'blueGray.50' }}
 		>
 			<VStack alignItems="center" space="md">
-				<HStack alignItems="center" space="2xl">
-					<AspectRatio w={24} ratio={1.66}>
-						<Image
-							source={{ uri: 'images/nextjs-logo.png' }}
-							alt="NextJS Logo"
-							resizeMode="contain"
-						/>
-					</AspectRatio>
-					<Text fontSize="4xl">+</Text>
-					<Image
-						source={{ uri: 'images/nativebase-logo.svg' }}
-						alt="NativeBase Logo"
-						size={24}
-						resizeMode="contain"
-					/>
-				</HStack>
 				<Heading>Welcome to NativeBase</Heading>
 				<Input value={value} onChangeText={setValue} />
-				<Text>
-					Edit{' '}
-					<Box
-						_text={{
-							fontFamily: 'monospace',
-							fontSize: 'sm',
-						}}
-						px={2}
-						py={1}
-						_dark={{ bg: 'blueGray.800' }}
-						_light={{ bg: 'blueGray.200' }}
-					>
-						src/pages/index.js
-					</Box>{' '}
-					and save to reload.
-				</Text>
-				<HStack alignItems="center" space="sm">
-					<Link href="https://nextjs.org/docs/getting-started" isExternal>
-						<Text
-							_light={{ color: 'gray.700' }}
-							_dark={{ color: 'gray.400' }}
-							underline
-							fontSize={'xl'}
-						>
-							Learn NextJS
-						</Text>
-					</Link>
-					<Text>/</Text>
-					<Link href="https://docs.nativebase.io" isExternal>
-						<Text color="primary.500" underline fontSize={'xl'}>
-							Learn NativeBase
-						</Text>
-					</Link>
-				</HStack>
-			</VStack>
-			<ColorModeSwitch />
-			<Link mt="6" href="https://docs.nativebase.io" isExternal>
-				<Button variant="outline" colorScheme="coolGray">
-					View Repo
+				<Modal
+					isOpen={showModal}
+					onClose={async () => setShowModal(false)}
+					size="xl"
+				>
+					<Modal.Content>
+						<Modal.Header>Modal</Modal.Header>
+						<Modal.Body>
+							<VStack>
+								<Input
+									placeholder="Enter a value"
+									type="text"
+									value={value}
+									onChangeText={setValue}
+								/>
+							</VStack>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button.Group space={2}>
+								<Button
+									variant="ghost"
+									colorScheme="blueGray"
+									onPress={() => {
+										setShowModal(false);
+									}}
+								>
+									Close Modal
+								</Button>
+							</Button.Group>
+						</Modal.Footer>
+					</Modal.Content>
+				</Modal>
+				<Button
+					onPress={() => {
+						setShowModal(true);
+					}}
+				>
+					Show Modal
 				</Button>
-			</Link>
+			</VStack>
 		</Center>
-	);
-}
-// Color Switch Component
-function ColorModeSwitch() {
-	const { colorMode, toggleColorMode } = useColorMode();
-	return (
-		<Tooltip
-			label={colorMode === 'dark' ? 'Enable light mode' : 'Enable dark mode'}
-			placement="bottom right"
-			openDelay={300}
-			closeOnClick={false}
-		>
-			<IconButton
-				position="absolute"
-				top={12}
-				right={8}
-				onPress={toggleColorMode}
-				icon={colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
-				accessibilityLabel="Color Mode Switch"
-			/>
-		</Tooltip>
 	);
 }
